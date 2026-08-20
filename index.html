@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harmony Ears｜TCMC 現代阿卡貝拉工具集</title>
+<style>
+  :root{
+    --charcoal:#2E3A3F;
+    --teal:#0B6E6E;
+    --teal-bright:#2FBFAA;
+    --gold:#E8A33D;
+    --paper:#EAF2F1;
+    --muted:#8FA3A0;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(1200px 600px at 20% -10%, #33424A 0%, var(--charcoal) 55%, #232C30 100%);
+    color:var(--paper);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,sans-serif;
+    min-height:100vh;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:48px 20px 60px;}
+
+  .eyebrow{
+    font-size:12px;letter-spacing:.14em;color:var(--teal-bright);
+    font-weight:700;text-transform:uppercase;margin-bottom:10px;text-align:center;
+  }
+  h1{
+    font-family:"Noto Serif TC",serif;
+    font-size:clamp(28px,5vw,40px);
+    margin:0 0 10px;font-weight:700;color:#fff;letter-spacing:.02em;text-align:center;
+  }
+  .sub{color:var(--muted);font-size:15px;line-height:1.7;text-align:center;max-width:560px;margin:0 auto 44px;}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+
+  .card{
+    display:block;text-decoration:none;color:inherit;
+    background:linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+    border:1px solid rgba(234,242,241,0.1);
+    border-radius:16px;padding:24px 22px;
+    transition:transform .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .card:hover{
+    transform:translateY(-3px);
+    border-color:var(--teal-bright);
+    background:linear-gradient(180deg, rgba(47,191,170,0.08), rgba(255,255,255,0.02));
+  }
+  .card .tag{
+    display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;
+    color:var(--gold);background:rgba(232,163,61,0.14);border:1px solid rgba(232,163,61,0.3);
+    border-radius:20px;padding:3px 10px;margin-bottom:12px;
+  }
+  .card h2{
+    font-size:19px;margin:0 0 8px;font-weight:700;color:#fff;
+  }
+  .card p{
+    font-size:13.5px;color:var(--muted);line-height:1.6;margin:0 0 14px;
+  }
+  .card .ratios{
+    font-size:12px;color:var(--teal-bright);font-weight:600;
+    display:flex;gap:10px;flex-wrap:wrap;
+  }
+  .card .ratios span{
+    background:rgba(47,191,170,0.1);border-radius:6px;padding:2px 8px;
+  }
+  .card .arrow{
+    float:right;color:var(--muted);font-size:18px;transition:transform .15s ease, color .15s ease;
+  }
+  .card:hover .arrow{ transform:translateX(4px); color:var(--teal-bright); }
+
+  .card.placeholder{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;border-style:dashed;opacity:.55;cursor:default;
+  }
+  .card.placeholder:hover{ transform:none; border-color:rgba(234,242,241,0.1); background:linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015)); }
+  .card.placeholder .plus{ font-size:26px;color:var(--muted);margin-bottom:6px; }
+
+  footer{margin-top:48px;font-size:12px;color:var(--muted);text-align:center;line-height:1.8;}
+  footer a{color:var(--teal-bright);text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">TCMC · Harmony Ears</div>
+  <h1>泛音耳訓工具集</h1>
+  <div class="sub">台灣合唱音樂中心製作的一系列網頁版工具集，選一個開始練習。</div>
+
+  <div class="grid" id="appGrid"></div>
+
+  <footer>
+    台灣合唱音樂中心製作 · Harmony Ears<br>
+    <a href="https://github.com/TCMCtw" target="_blank" rel="noopener">github.com/TCMCtw</a>
+  </footer>
+</div>
+
+<script>
+// 之後有新 app，只要在這裡加一筆資料就好，不用改版面結構。
+const APPS = [
+  {
+    tag: '三和弦',
+    title: '泛音三度音準練習',
+    title: 'Just Intonation Third',
+    desc: '大三度／小三度純律音準練習，麥克風即時偵測，適合合唱團練習泛音融合的三和弦聽感。',
+    ratios: ['大三度 Major Third 5:4 −13.7¢', '小三度 Minor Third 6:5 +15.6¢'],
+    url: 'https://tcmctw.github.io/harmony-ears-third/',
+  },
+  {
+    tag: '七和弦',
+    title: '七和弦泛音音準練習',
+    title: 'Just Intonation Seventh',
+    desc: '大七和弦／屬七和弦純律音準練習，延續三和弦練習的架構，加入七音目標與即時判定。',
+    ratios: ['大七度 Major7 15:8 −11.7¢', '屬七度 Minor7 7:4 −31.2¢'],
+    url: 'https://tcmctw.github.io/harmony-ears-seventh/',
+  },
+];
+
+const grid = document.getElementById('appGrid');
+APPS.forEach(app=>{
+  const a = document.createElement('a');
+  a.className = 'card';
+  a.href = app.url;
+  a.innerHTML = `
+    <span class="arrow">→</span>
+    <span class="tag">${app.tag}</span>
+    <h2>${app.title}</h2>
+    <p>${app.desc}</p>
+    <div class="ratios">${app.ratios.map(r=>`<span>${r}</span>`).join('')}</div>
+  `;
+  grid.appendChild(a);
+});
+
+// 佔位卡片，暗示之後還會有更多 app 加進來
+const placeholder = document.createElement('div');
+placeholder.className = 'card placeholder';
+placeholder.innerHTML = `<div class="plus">+</div><div>更多練習陸續推出</div>`;
+grid.appendChild(placeholder);
+</script>
+</body>
+</html>
