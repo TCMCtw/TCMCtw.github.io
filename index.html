@@ -36,12 +36,15 @@
 
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
 
+  .card-wrap{display:flex;flex-direction:column;}
+
   .card{
     display:block;text-decoration:none;color:inherit;
     background:linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
     border:1px solid rgba(234,242,241,0.1);
-    border-radius:16px;padding:24px 22px;
+    border-radius:16px 16px 0 0;padding:24px 22px;
     transition:transform .15s ease, border-color .15s ease, background .15s ease;
+    border-bottom:none;
   }
   .card:hover{
     transform:translateY(-3px);
@@ -71,9 +74,30 @@
   }
   .card:hover .arrow{ transform:translateX(4px); color:var(--teal-bright); }
 
+  .manual-row{
+    display:flex;gap:8px;
+    border:1px solid rgba(234,242,241,0.1);border-top:none;
+    border-radius:0 0 16px 16px;
+    background:rgba(0,0,0,0.12);
+    padding:10px 22px;
+  }
+  .manual-row a{
+    flex:1;text-align:center;text-decoration:none;
+    font-size:12px;font-weight:600;letter-spacing:.02em;
+    color:var(--muted);
+    border:1px solid rgba(234,242,241,0.12);border-radius:8px;
+    padding:6px 8px;
+    transition:color .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .manual-row a:hover{
+    color:var(--teal-bright);border-color:var(--teal-bright);
+    background:rgba(47,191,170,0.08);
+  }
+
   .card.placeholder{
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     text-align:center;border-style:dashed;opacity:.55;cursor:default;
+    border-radius:16px;border-bottom:1px dashed rgba(234,242,241,0.1);
   }
   .card.placeholder:hover{ transform:none; border-color:rgba(234,242,241,0.1); background:linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015)); }
   .card.placeholder .plus{ font-size:26px;color:var(--muted);margin-bottom:6px; }
@@ -101,25 +125,47 @@
 const APPS = [
   {
     tag: '三和弦 Third',
-    title: '泛音三度音準練習
-    Just Intonation Third',
-    
+    title: '泛音三度音準練習       Just Intonation Third',
     desc: '大三度／小三度純律音準練習，麥克風即時偵測，適合合唱團練習泛音融合的三和弦聽感。',
     ratios: ['大三度 Major Third 5:4 −13.7¢', '小三度 Minor Third 6:5 +15.6¢'],
     url: 'https://tcmctw.github.io/harmony-ears-third/',
+    manualZh: 'https://tcmctw.github.io/harmony-ears-third/manual/%E6%B3%9B%E9%9F%B3%E4%B8%89%E5%BA%A6%E9%9F%B3%E6%BA%96%E7%B7%B4%E7%BF%92_%E4%BD%BF%E7%94%A8%E8%AA%AA%E6%98%8E%E6%9B%B8.pdf',
+    manualEn: 'https://tcmctw.github.io/harmony-ears-third/manual/Harmonic_Third_Pitch_Trainer_User_Manual_EN.pdf',
   },
   {
     tag: '七和弦 Seventh',
-    title: '七和弦泛音音準練習
-    Just Intonation Seventh',
+    title: '七和弦泛音音準練習     Just Intonation Seventh',
     desc: '大七和弦／屬七和弦純律音準練習，延續三和弦練習的架構，加入七音目標與即時判定。',
     ratios: ['大七度 Major7 15:8 −11.7¢', '屬七度 Minor7 7:4 −31.2¢'],
     url: 'https://tcmctw.github.io/harmony-ears-seventh/',
+    manualZh: 'https://tcmctw.github.io/harmony-ears-seventh/manual/%E4%B8%83%E5%92%8C%E5%BC%A6%E6%B3%9B%E9%9F%B3%E9%9F%B3%E6%BA%96%E7%B7%B4%E7%BF%92_%E4%BD%BF%E7%94%A8%E8%AA%AA%E6%98%8E%E6%9B%B8.pdf',
+    manualEn: 'https://tcmctw.github.io/harmony-ears-seventh/manual/Harmonic_Seventh_Pitch_Trainer_User_Manual_EN.pdf',
+  },
+  {
+    tag: '和弦聲部練習 Chord Voicing',
+    title: '和弦聲部練習 Chord Voicing Practise',
+    desc: '用和弦代號產生各聲部的音練習，選擇個聲部要唱哪個音後，再選擇要練習的聲部，開麥克風即時偵測。',
+    ratios: ['十二平均律'],
+    url: 'https://tcmctw.github.io/chord_voicing_practise/',
+    manualZh: 'https://tcmctw.github.io/chord_voicing_practise/manual/%E5%92%8C%E5%BC%A6%E8%81%B2%E9%83%A8%E9%9F%B3%E6%BA%96%E7%B7%B4%E7%BF%92_%E4%BD%BF%E7%94%A8%E8%AA%AA%E6%98%8E%E6%9B%B8.pdf',
+    manualEn: 'https://tcmctw.github.io/chord_voicing_practise/manual/Chord_Voicing_Trainer_User_Manual.pdf',
+  },
+  {
+    tag: '和弦進行 Progression',
+    title: '和弦進行音準練習     Chord Progression Pitch Trainer',
+    desc: '選一條和弦進行、選調、選你要唱的聲部，跟著節奏一路唱過整條和弦進行，麥克風即時偵測音準。',
+    ratios: ['根音十二平均律 ET root', '三、五、七音純律 JI upper tones'],
+    url: 'https://tcmctw.github.io/chord_progression_practise/',
+    manualZh: 'https://tcmctw.github.io/chord_progression_practise/manual/%E5%92%8C%E5%BC%A6%E9%80%B2%E8%A1%8C%E9%9F%B3%E6%BA%96%E7%B7%B4%E7%BF%92_%E4%BD%BF%E7%94%A8%E8%AA%AA%E6%98%8E%E6%9B%B8.pdf',
+    manualEn: 'https://tcmctw.github.io/chord_progression_practise/manual/Chord_Progression_Pitch_Trainer_User_Manual.pdf',
   },
 ];
 
 const grid = document.getElementById('appGrid');
 APPS.forEach(app=>{
+  const wrap = document.createElement('div');
+  wrap.className = 'card-wrap';
+
   const a = document.createElement('a');
   a.className = 'card';
   a.href = app.url;
@@ -130,7 +176,17 @@ APPS.forEach(app=>{
     <p>${app.desc}</p>
     <div class="ratios">${app.ratios.map(r=>`<span>${r}</span>`).join('')}</div>
   `;
-  grid.appendChild(a);
+  wrap.appendChild(a);
+
+  const manualRow = document.createElement('div');
+  manualRow.className = 'manual-row';
+  manualRow.innerHTML = `
+    <a href="${app.manualZh}" target="_blank" rel="noopener">📄 使用手冊（中文）</a>
+    <a href="${app.manualEn}" target="_blank" rel="noopener">📄 Manual (EN)</a>
+  `;
+  wrap.appendChild(manualRow);
+
+  grid.appendChild(wrap);
 });
 
 // 佔位卡片，暗示之後還會有更多 app 加進來

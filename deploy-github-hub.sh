@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 一鍵部署到 GitHub Pages
+# 一鍵部署到 GitHub Pages（Hub 首頁）
 # 1) 自動從 ~/Downloads 抓「最新下載」的 index*.html 更新 index.html（若有的話）
 # 2) 一併加入 manual/ 資料夾內的使用手冊 PDF（若有的話）
 # 3) commit + push
