@@ -16,7 +16,7 @@ button.go{font-size:15px;padding:9px 20px;background:var(--teal);color:#fff}butt
 .note{font-size:12px;color:var(--mut);margin-top:6px}#st,#pst{min-height:1.4em;font-size:13px;margin-top:8px}
 .step{display:flex;align-items:center;gap:10px}.step button{width:56px;height:48px;font-size:26px;line-height:1;padding:0;border-radius:12px;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.step .sv{min-width:88px;text-align:center;font-size:18px;font-weight:600}
 .bpm{font-size:20px;font-weight:700;color:var(--gold);margin-top:8px}
-#dl button{display:block;width:100%;margin:8px 0 0;text-align:left}#dl .note{margin-top:6px}
+#dl button{display:block;width:100%;margin:8px 0 0;text-align:left}#dl .note{margin-top:6px}#dl button.done{opacity:.6;background:none;color:var(--mut);border-color:var(--line)}
 </style></head><body><main>
 <h1>變速移調轉檔 <span style="font-weight:400">/ Tempo &amp; Key Converter</span></h1>
 <p class="sub">v0.3 · 練唱室 Practice Room · 檔案在你的裝置內處理，不會上傳 Processed on your device</p>
@@ -909,10 +909,13 @@ async function makeZip(files){const te=new TextEncoder(),parts=[],cen=[];let off
  const e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
  return new Blob([...parts,...cen,e.buffer],{type:'application/zip'})}
 function showDl(files,zip,zname){const dl=$('dl');dl.innerHTML='';const mb=x=>(x.size/1048576).toFixed(1)+' MB';
- const add=(txt,blob,name,cls)=>{const b=document.createElement('button');if(cls)b.className=cls;b.textContent=txt;b.onclick=()=>{save(blob,name).catch(e=>{$('st').textContent='未儲存 Not saved：'+((e&&(e.message||e.code))||e)})};dl.appendChild(b)};
+ const add=(txt,blob,name,cls,isFile)=>{const b=document.createElement('button');if(cls)b.className=cls;if(isFile)b.dataset.file='1';b.textContent=txt;
+  b.onclick=()=>{save(blob,name).then(()=>{if(!b.classList.contains('done')){b.classList.add('done');b.textContent='✓ 已按下載 '+txt.replace(/^⬇ /,'')}
+   const c=$('dlc');if(c)c.textContent='已按下載 '+dl.querySelectorAll('button.done[data-file]').length+'/'+files.length+' 個檔案 files'}).catch(e=>{$('st').textContent='未儲存 Not saved：'+((e&&(e.message||e.code))||e)})};dl.appendChild(b)};
  const note=t=>{const n=document.createElement('div');n.className='note';n.textContent=t;dl.appendChild(n)};
- if(zip){add('⬇ 下載全部（ZIP，'+files.length+' 個檔，'+mb(zip)+'）',zip,zname,'go');note('只會有一次下載；存好後在「檔案」App 點兩下 ZIP 即可解壓縮。 One download — tap the ZIP in Files to unzip.');note('或逐一下載：每個檔案請先按「儲存」，再按下一個。 Or one by one: save each before tapping the next.')}
- files.forEach(f=>add('⬇ '+f.name+'（'+mb(f.blob)+'）',f.blob,f.name))}
+ if(zip){add('⬇ 下載全部（ZIP，'+files.length+' 個檔，'+mb(zip)+'）',zip,zname,'go');note('只會有一次下載；存好後在「檔案」App 點兩下 ZIP 即可解壓縮。 One download — tap the ZIP in Files to unzip.');note('或逐一下載：每個檔案請先按「儲存」，再按下一個；按過的會打勾（只代表已按下載，iPhone 請確認有按「儲存」）。 Or one by one: save each before tapping the next; ✓ means tapped, not necessarily saved.')}
+ if(files.length>1){const c=document.createElement('div');c.className='note';c.id='dlc';c.textContent='已按下載 0/'+files.length+' 個檔案 files';dl.appendChild(c)}
+ files.forEach(f=>add('⬇ '+f.name+'（'+mb(f.blob)+'）',f.blob,f.name,'',true))}
 const nap=()=>new Promise(r=>setTimeout(r,30));
 let cache={key:'',outs:[]},cur=[];const live={};
 function applyLive(t){const o=live[t.id];if(!o)return;const n=ctx.currentTime;o.g.gain.setTargetAtTime(t.mute?0:t.vol,n,0.02);o.pn.pan.setTargetAtTime(t.pan,n,0.02)}
