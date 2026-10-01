@@ -16,6 +16,7 @@ button.go{font-size:15px;padding:9px 20px;background:var(--teal);color:#fff}butt
 .note{font-size:12px;color:var(--mut);margin-top:6px}#st,#pst{min-height:1.4em;font-size:13px;margin-top:8px}
 .step{display:flex;align-items:center;gap:10px}.step button{width:56px;height:48px;font-size:26px;line-height:1;padding:0;border-radius:12px;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.step .sv{min-width:88px;text-align:center;font-size:18px;font-weight:600}
 .bpm{font-size:20px;font-weight:700;color:var(--gold);margin-top:8px}
+#dl button{display:block;width:100%;margin:8px 0 0;text-align:left}#dl .note{margin-top:6px}
 </style></head><body><main>
 <h1>變速移調轉檔 <span style="font-weight:400">/ Tempo &amp; Key Converter</span></h1>
 <p class="sub">v0.3 · 練唱室 Practice Room · 檔案在你的裝置內處理，不會上傳 Processed on your device</p>
@@ -38,7 +39,7 @@ button.go{font-size:15px;padding:9px 20px;background:var(--teal);color:#fff}butt
 <div class="row"><select id="mode"><option value="sep">各聲部分開 Separate files</option><option value="mix">混成一個 One mix</option></select>
 <select id="fmt"><option value="wav16">WAV 16-bit</option><option value="wav24">WAV 24-bit</option><option value="mp3-192">MP3 192 kbps</option><option value="mp3-320">MP3 320 kbps</option></select></div>
 <div class="note">分開匯出保留各檔原本的音量與左右平衡；混合匯出套用上方各軌的音量、左右與靜音。<br>Separate keeps each file's own balance; One mix applies the track volume, pan and mute above.</div>
-<p><button class="go" id="go" disabled>匯出 Export</button></p><div id="st"></div></section>
+<p><button class="go" id="go" disabled>匯出 Export</button></p><div id="st"></div><div id="dl"></div></section>
 </main>
 <script>
 /*
@@ -864,7 +865,10 @@ function render(){$('go').disabled=$('pv').disabled=!tracks.length;$('list').inn
  d.querySelector('.p').oninput=e=>{t.pan=e.target.value/100;d.querySelector('.pv').textContent=e.target.value;applyLive(t)};
  d.querySelector('.m').onclick=e=>{t.mute=!t.mute;e.target.classList.toggle('on',t.mute);applyLive(t)};
  d.querySelector('.x').onclick=()=>{tracks=tracks.filter(x=>x!==t);cache={key:'',outs:[]};stopPv();if(!tracks.length)resetAll();render()};$('list').appendChild(d)});info()}
-$('drop').onclick=()=>$('fi').click();$('fi').onchange=e=>{add(e.target.files);e.target.value=''};
+$('drop').onclick=async()=>{
+ if(window.showOpenFilePicker){try{const hs=await showOpenFilePicker({id:'tcmc-converter',multiple:true,types:[{description:'Audio',accept:{'audio/*':['.mp3','.wav','.m4a','.aac','.flac','.ogg','.oga','.opus','.aif','.aiff','.wma','.weba']}}]});
+  add(await Promise.all(hs.map(x=>x.getFile())))}catch(e){if(!e||e.name!=='AbortError')$('fi').click()}return}
+ $('fi').click()};$('fi').onchange=e=>{add(e.target.files);e.target.value=''};
 ['dragenter','dragover'].forEach(v=>$('drop').addEventListener(v,e=>{e.preventDefault();$('drop').classList.add('d')}));
 ['dragleave','drop'].forEach(v=>$('drop').addEventListener(v,e=>{e.preventDefault();$('drop').classList.remove('d')}));
 $('drop').addEventListener('drop',e=>add(e.dataTransfer.files));
@@ -894,10 +898,25 @@ async function save(b,name){
    if(e&&(e.code==='rejected_extension'||e.code==='extension_not_enabled'))throw new Error('處理與編碼都成功（'+(b.size/1048576).toFixed(1)+' MB），但這個預覽環境不允許儲存 .'+ext+' 檔；請用 GitHub Pages 版本下載。 Processing and encoding succeeded ('+(b.size/1048576).toFixed(1)+' MB), but this preview cannot save .'+ext+' files.');
    throw e}}}
  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),15000)}
+const crcT=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(u){let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=crcT[(c^u[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0}
+async function makeZip(files){const te=new TextEncoder(),parts=[],cen=[];let off=0,cs=0;
+ for(const f of files){const nm=te.encode(f.name),data=new Uint8Array(await f.blob.arrayBuffer()),crc=crc32(data),sz=data.length;
+  const lh=new DataView(new ArrayBuffer(30));lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(12,0x21,true);lh.setUint32(14,crc,true);lh.setUint32(18,sz,true);lh.setUint32(22,sz,true);lh.setUint16(26,nm.length,true);
+  parts.push(lh.buffer,nm,f.blob);
+  const ch=new DataView(new ArrayBuffer(46));ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(14,0x21,true);ch.setUint32(16,crc,true);ch.setUint32(20,sz,true);ch.setUint32(24,sz,true);ch.setUint16(28,nm.length,true);ch.setUint32(42,off,true);
+  cen.push(ch.buffer,nm);cs+=46+nm.length;off+=30+nm.length+sz}
+ const e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
+ return new Blob([...parts,...cen,e.buffer],{type:'application/zip'})}
+function showDl(files,zip,zname){const dl=$('dl');dl.innerHTML='';const mb=x=>(x.size/1048576).toFixed(1)+' MB';
+ const add=(txt,blob,name,cls)=>{const b=document.createElement('button');if(cls)b.className=cls;b.textContent=txt;b.onclick=()=>{save(blob,name).catch(e=>{$('st').textContent='未儲存 Not saved：'+((e&&(e.message||e.code))||e)})};dl.appendChild(b)};
+ const note=t=>{const n=document.createElement('div');n.className='note';n.textContent=t;dl.appendChild(n)};
+ if(zip){add('⬇ 下載全部（ZIP，'+files.length+' 個檔，'+mb(zip)+'）',zip,zname,'go');note('只會有一次下載；存好後在「檔案」App 點兩下 ZIP 即可解壓縮。 One download — tap the ZIP in Files to unzip.');note('或逐一下載：每個檔案請先按「儲存」，再按下一個。 Or one by one: save each before tapping the next.')}
+ files.forEach(f=>add('⬇ '+f.name+'（'+mb(f.blob)+'）',f.blob,f.name))}
 const nap=()=>new Promise(r=>setTimeout(r,30));
 let cache={key:'',outs:[]},cur=[];const live={};
 function applyLive(t){const o=live[t.id];if(!o)return;const n=ctx.currentTime;o.g.gain.setTargetAtTime(t.mute?0:t.vol,n,0.02);o.pn.pan.setTargetAtTime(t.pan,n,0.02)}
-function resetAll(){SM=0;CT=0;$('b0').value='';$('b2').value='';$('b1').value=100;cache={key:'',outs:[]};stopPv();$('pst').textContent='';$('st').textContent='';info()}
+function resetAll(){SM=0;CT=0;$('b0').value='';$('b2').value='';$('b1').value=100;cache={key:'',outs:[]};stopPv();$('pst').textContent='';$('st').textContent='';$('dl').innerHTML='';info()}
 async function getOuts(p,el){el=el||$('st');const key=tracks.map(t=>t.id).join(',')+'|'+p.tempo+'|'+p.pitch;if(cache.key===key)return cache.outs;cache={key:'',outs:[]};
  const outs=[];for(let i=0;i<tracks.length;i++){const lab='處理中 Processing '+(i+1)+'/'+tracks.length;el.textContent=lab+'…';await nap();outs.push(await stretch(tracks[i].buf,p.tempo,p.pitch,q=>{el.textContent=lab+'（'+Math.round(q*100)+'%）'}))}
  cache={key,outs};return outs}
@@ -912,14 +931,13 @@ $('pv').onclick=async()=>{if(cur.length){stopPv();$('pst').textContent='';return
   $('pv').textContent='■ 停止 Stop';$('pv').classList.add('on');$('pst').textContent='試聽中 Playing…（音量為近似值，匯出響度可能略有不同 level approximate）'}
  catch(e){console.error(e);$('pst').textContent='失敗 Failed：'+(e.message||e)}
  finally{$('pv').disabled=!tracks.length}};
-$('go').onclick=async()=>{const p=P(),tg=tag(),sfx=tg?'_'+tg:'';$('go').disabled=true;ac();info();stopPv();cache={key:'',outs:[]};
+$('go').onclick=async()=>{const p=P(),tg=tag(),sfx=tg?'_'+tg:'';$('go').disabled=true;ac();info();stopPv();cache={key:'',outs:[]};$('dl').innerHTML='';
  const st=$('st'),N=tracks.length;
  try{
-  if($('mode').value==='sep'){
-   for(let i=0;i<N;i++){const lab='處理 Processing '+(i+1)+'/'+N;st.textContent=lab+'…';await nap();
+  if($('mode').value==='sep'){const files=[];for(let i=0;i<N;i++){const lab='處理 Processing '+(i+1)+'/'+N;st.textContent=lab+'…';await nap();
     let o=await stretch(tracks[i].buf,p.tempo,p.pitch,q=>{st.textContent=lab+'（'+Math.round(q*100)+'%）'});
-    st.textContent='編碼 Encoding '+(i+1)+'/'+N+'…';await nap();const e=await enc(o);o=null;await save(e.b,tracks[i].name+sfx+'.'+e.ext);await nap()}
-   st.textContent='完成 Done：'+N+' 個檔案 files（若瀏覽器詢問，請允許多個下載 allow multiple downloads）'}
+    st.textContent='編碼 Encoding '+(i+1)+'/'+N+'…';await nap();const e=await enc(o);o=null;files.push({name:tracks[i].name+sfx+'.'+e.ext,blob:e.b});await nap()}
+   if(N===1){showDl(files,null);await save(files[0].blob,files[0].name);st.textContent='完成 Done：1 個檔案 file'}else{st.textContent='打包 Zipping…';await nap();const zip=await makeZip(files);showDl(files,zip,'各聲部'+sfx+'.zip');st.textContent='完成 Done：'+N+' 個檔案已就緒，請按下方按鈕下載 Ready — tap a button below'}}
   else{
    const idx=tracks.map((t,i)=>i).filter(i=>!tracks[i].mute);if(!idx.length)throw new Error('全部靜音 All tracks muted');
    const sr=tracks[idx[0]].buf.sampleRate,want=Math.max(...idx.map(i=>Math.round(tracks[i].buf.length/p.tempo))),mL=new Float32Array(want),mR=new Float32Array(want);
@@ -929,7 +947,7 @@ $('go').onclick=async()=>{const p=P(),tg=tag(),sfx=tg?'_'+tg:'';$('go').disabled
     let A,B,C,D;if(pn<=0){const x=(pn+1)*Math.PI/2;A=1;B=Math.cos(x);C=0;D=Math.sin(x)}else{const x=pn*Math.PI/2;A=Math.cos(x);B=0;C=Math.sin(x);D=1}
     for(let j=0;j<n;j++){mL[j]+=v*(a[j]*A+b[j]*B);mR[j]+=v*(a[j]*C+b[j]*D)}o=null}
    st.textContent='編碼 Encoding…';await nap();const e=await enc({sampleRate:sr,numberOfChannels:2,getChannelData:c=>c?mR:mL});
-   await save(e.b,'混音'+sfx+'.'+e.ext);st.textContent='完成 Done：'+(e.b.size/1048576).toFixed(1)+' MB'}
+   const fn='混音'+sfx+'.'+e.ext;showDl([{name:fn,blob:e.b}],null);await save(e.b,fn);st.textContent='完成 Done：'+(e.b.size/1048576).toFixed(1)+' MB'}
  }catch(e){console.error(e);st.textContent='失敗 Failed：'+(e.message||e)+(String($('fmt').value).startsWith('mp3')?'（MP3 編碼器需要網路 MP3 encoder needs internet；可改用 WAV）':'')}
  finally{$('go').disabled=!tracks.length}};
 })();
