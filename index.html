@@ -105,6 +105,18 @@
   footer{margin-top:48px;font-size:12px;color:var(--muted);text-align:center;line-height:1.8;}
   footer a{color:var(--teal-bright);text-decoration:none;}
   .cat{margin:0 0 40px;} .cat-h{font-family:"Noto Serif TC",serif;font-size:22px;color:var(--gold);margin:0 0 14px;}
+
+  html{scroll-behavior:smooth;}
+  .hub{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:0 0 44px;}
+  .hub-block{background:linear-gradient(180deg, rgba(47,191,170,0.10), rgba(255,255,255,0.02));border:1px solid rgba(47,191,170,0.35);border-radius:18px;padding:20px 20px 14px;}
+  .hub-head{display:block;text-decoration:none;color:#fff;font-family:"Noto Serif TC",serif;font-size:22px;font-weight:700;margin:0 0 4px;}
+  .hub-head small{display:block;font-family:inherit;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px;}
+  .hub-head .arrow{float:right;color:var(--teal-bright);}
+  .hub-list{list-style:none;margin:12px 0 0;padding:0;}
+  .hub-list a{display:block;text-decoration:none;color:var(--paper);font-size:15px;padding:11px 4px;border-top:1px solid rgba(234,242,241,0.1);}
+  .hub-list a:hover{color:var(--teal-bright);}
+  .hub-list a::after{content:"→";float:right;color:var(--muted);}
+  .cat{scroll-margin-top:16px;}
 </style>
 </head>
 <body>
@@ -112,6 +124,11 @@
   <div class="eyebrow">TCMC · Harmony Ears</div>
   <h1>現代阿卡貝拉工具集</h1>
   <div class="sub">台灣合唱音樂中心製作的網頁版工具集，分成純律耳訓和練唱兩類。<br>Web tools by TCMC, in two groups: just-intonation ear training and practice room.</div>
+
+  <div class="hub" id="hub">
+    <div class="hub-block"><a class="hub-head" href="#ears">Harmony Ears 純律練耳<span class="arrow">↓</span><small>純律耳訓 · 4 個工具</small></a><ul class="hub-list" id="hubEars"></ul></div>
+    <div class="hub-block"><a class="hub-head" href="#practice">練唱室 Practice Room<span class="arrow">↓</span><small>跟唱與速度調性調整 · 2 個工具</small></a><ul class="hub-list" id="hubPractice"></ul></div>
+  </div>
 
   <section class="cat" id="ears"><h2 class="cat-h">Harmony Ears 純律練耳</h2><div class="grid" id="appGrid"></div></section>
   <section class="cat" id="practice"><h2 class="cat-h">練唱室 Practice Room</h2><div class="grid" id="practiceGrid"></div></section>
@@ -167,15 +184,15 @@ const PRACTICE = [
   {
     tag: '跟唱 Sing-Along',
     title: 'MIDI／音檔 跟唱音準練習       Sing-Along Pitch Trainer',
-    desc: '匯入 MIDI 或單聲部音檔，選你的聲部跟唱；麥克風即時顯示音高偏差與頻譜。可變速、移調、起音、A-B 反覆，含評分與記錄 CSV，可匯出 WAV／MP3。',
+    desc: '匯入 MIDI 或單聲部音檔（用來聽），再加 MusicXML 樂譜（用來看），選你的聲部跟唱；麥克風即時顯示音高偏差與頻譜。可變速、移調、起音、A-B 反覆，含評分與記錄 CSV，可匯出 WAV／MP3。',
     ratios: ['即時偏差 ¢', 'A-B 反覆', '評分 CSV'],
     url: 'https://tcmctw.github.io/Sing-along/',
     manualZh: 'https://tcmctw.github.io/Sing-along/sing-along-manual-zh.html',
     manualEn: 'https://tcmctw.github.io/Sing-along/sing-along-manual-en.html',
   },
   {
-    tag: '轉檔 Converter',
-    title: '變速移調轉檔       Tempo & Key Converter',
+    tag: '速度調性調整 Tempo & Key',
+    title: '速度調性調整       Tempo & Key Converter',
     desc: '把練習音檔變速、移調，可試聽、調各聲部音量與左右，再匯出 WAV 或 MP3（各聲部分開或混成一個）。檔案只在你的裝置內處理。',
     ratios: ['變速', '移調', 'WAV / MP3'],
     url: 'https://tcmctw.github.io/Tempo-and-Key-Converter/',
@@ -221,6 +238,13 @@ const placeholder = document.createElement('div');
 placeholder.className = 'card placeholder';
 placeholder.innerHTML = `<div class="plus">+</div><div>更多練唱工具陸續推出</div>`;
 pgrid.appendChild(placeholder);
+
+function fillHub(list, id){
+  const ul=document.getElementById(id);
+  list.forEach(a=>{const li=document.createElement('li');const l=document.createElement('a');l.href=a.url;l.textContent=a.tag;li.appendChild(l);ul.appendChild(li);});
+}
+fillHub(APPS,'hubEars');
+fillHub(PRACTICE,'hubPractice');
 </script>
 </body>
 </html>
