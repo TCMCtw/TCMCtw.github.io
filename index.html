@@ -129,8 +129,8 @@
   <div class="sub">台灣合唱音樂中心製作的網頁版工具集，分成純律耳訓和練唱兩類。<br>Web tools by TCMC, in two groups: just-intonation ear training and practice room.</div>
 
   <div class="hub" id="hub">
-    <div class="hub-block"><a class="hub-head" href="#ears">Harmony Ears 純律練耳<span class="arrow">↓</span><small>純律耳訓 · 4 個工具</small></a><ul class="hub-list" id="hubEars"></ul></div>
-    <div class="hub-block"><a class="hub-head" href="#practice">練唱室 Practice Room<span class="arrow">↓</span><small>跟唱與速度調性調整 · 2 個工具</small></a><ul class="hub-list" id="hubPractice"></ul></div>
+    <div class="hub-block"><a class="hub-head" href="#ears">Harmony Ears 純律練耳<span class="arrow">↓</span><small>純律耳訓 · 6 個工具</small></a><ul class="hub-list" id="hubEars"></ul></div>
+    <div class="hub-block"><a class="hub-head" href="#practice">練唱室 Practice Room<span class="arrow">↓</span><small>調音、跟唱與速度調性調整 · 2 個工具</small></a><ul class="hub-list" id="hubPractice"></ul></div>
   </div>
 
   <section class="cat" id="ears"><h2 class="cat-h">Harmony Ears 純律練耳</h2><div class="grid" id="appGrid"></div></section>
@@ -184,6 +184,24 @@ const APPS = [
     url: 'https://tcmctw.github.io/chord_progression_practise/',
     manualZh: 'https://tcmctw.github.io/chord_progression_practise/manual/%E5%92%8C%E5%BC%A6%E9%80%B2%E8%A1%8C%E9%9F%B3%E6%BA%96%E7%B7%B4%E7%BF%92_%E4%BD%BF%E7%94%A8%E8%AA%AA%E6%98%8E%E6%9B%B8.pdf',
     manualEn: 'https://tcmctw.github.io/chord_progression_practise/manual/Chord_Progression_Pitch_Trainer_User_Manual.pdf',
+  },
+  {
+    tag: '拍音調音 Tune to Pure',
+    title: '調到沒拍音 Tune to Pure',
+    desc: '固定音一直響，拖滑桿或開口唱，把齊唱、八度、五度、四度調到拍音完全消失；麥克風即時偵測，含中文診斷報告 PDF。',
+    ratios: ['齊唱 1:1', '八度 2:1', '五度 3:2', '四度 4:3'],
+    url: 'https://tcmctw.github.io/tune-to-pure/',
+    manualZh: 'https://tcmctw.github.io/tune-to-pure/tune-to-pure-manual-zh.html',
+    manualEn: 'https://tcmctw.github.io/tune-to-pure/tune-to-pure-manual-en.html',
+  },
+  {
+    tag: '二度解決 Seconds',
+    title: '大小二度練習 Seconds Practice',
+    desc: '先調出大二度或小二度，再把同一個音解決到純三度或同音；滑桿調音或開口唱，麥克風即時判定，含中文診斷報告 PDF。',
+    ratios: ['大二度 9:8 → 5:4', '小二度 16:15 → 同音', '小二度 → 小三度 6:5'],
+    url: 'https://tcmctw.github.io/seconds-practice/',
+    manualZh: 'https://tcmctw.github.io/seconds-practice/seconds-practice-manual-zh.html',
+    manualEn: 'https://tcmctw.github.io/seconds-practice/seconds-practice-manual-en.html',
   },
 ];
 
