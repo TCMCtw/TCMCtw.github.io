@@ -126,18 +126,20 @@
 <div class="wrap">
   <div class="eyebrow">TCMC · Harmony Ears</div>
   <h1>現代阿卡貝拉工具集</h1>
-  <div class="sub">台灣合唱音樂中心製作的網頁版工具集，分成純律耳訓和練唱兩類。<br>Web tools by TCMC, in two groups: just-intonation ear training and practice room.</div>
+  <div class="sub">台灣合唱音樂中心製作的網頁版工具集，分成純律耳訓、練唱和調式練習三類。<br>Web tools by TCMC, in three groups: just-intonation ear training, practice room, and modes practice.</div>
 
   <div class="hub" id="hub">
     <div class="hub-block"><a class="hub-head" href="#ears">Harmony Ears 純律練耳<span class="arrow">↓</span><small>純律耳訓 · 6 個工具</small></a><ul class="hub-list" id="hubEars"></ul></div>
     <div class="hub-block"><a class="hub-head" href="#practice">練唱室 Practice Room<span class="arrow">↓</span><small>調音、跟唱與速度調性調整 · 2 個工具</small></a><ul class="hub-list" id="hubPractice"></ul></div>
+    <div class="hub-block"><a class="hub-head" href="#modes">調式 Modes<span class="arrow">↓</span><small>觀念教學、五個系列與聽音練習 · 1 個入口</small></a><ul class="hub-list" id="hubModes"></ul></div>
   </div>
 
   <section class="cat" id="ears"><h2 class="cat-h">Harmony Ears 純律練耳</h2><div class="grid" id="appGrid"></div></section>
+  <section class="cat" id="modes"><h2 class="cat-h">調式 Modes</h2><div class="grid" id="modesGrid"></div></section>
   <section class="cat" id="practice"><h2 class="cat-h">練唱室 Practice Room</h2><div class="grid" id="practiceGrid"></div></section>
 
   <footer>
-    台灣合唱音樂中心製作 · Harmony Ears · 練唱室 Practice Room<br>
+    台灣合唱音樂中心製作 · Harmony Ears · 練唱室 Practice Room · 調式 Modes<br>
     <a href="https://github.com/TCMCtw" target="_blank" rel="noopener">github.com/TCMCtw</a>
 </footer>
   <div class="license">
@@ -253,17 +255,32 @@ function addCard(app, target){
   `;
   wrap.appendChild(a);
 
-  const manualRow = document.createElement('div');
-  manualRow.className = 'manual-row';
-  manualRow.innerHTML = `
-    <a href="${app.manualZh}" target="_blank" rel="noopener">📄 使用手冊（中文）</a>
-    <a href="${app.manualEn}" target="_blank" rel="noopener">📄 Manual (EN)</a>
-  `;
-  wrap.appendChild(manualRow);
+  if (app.manualZh || app.manualEn) {
+    const manualRow = document.createElement('div');
+    manualRow.className = 'manual-row';
+    manualRow.innerHTML = `
+      ${app.manualZh ? `<a href="${app.manualZh}" target="_blank" rel="noopener">📄 使用手冊（中文）</a>` : ''}
+      ${app.manualEn ? `<a href="${app.manualEn}" target="_blank" rel="noopener">📄 Manual (EN)</a>` : ''}
+    `;
+    wrap.appendChild(manualRow);
+  }
 
   target.appendChild(wrap);
 }
+// 調式練習入口：整個系列在 modal-practice-index，這裡只放一張入口卡
+const MODES = [
+  {
+    tag: '調式練習 Modes',
+    title: '調式練習 Modes Practice',
+    desc: '七個教會調式的開口唱練習：先從觀念教學認識音階與調式，再照系列練——練習一、二，降七、升四、同主音調式變化、一音變身，最後用聽音練習驗收。中英對照，附音檔、譜例與說明。',
+    ratios: ['觀念教學', '六個練習', '中英對照'],
+    url: 'https://tcmctw.github.io/modal-practice-index/',
+  },
+];
+
 APPS.forEach(a=>addCard(a,grid));
+const mgrid = document.getElementById('modesGrid');
+MODES.forEach(a=>addCard(a,mgrid));
 const pgrid = document.getElementById('practiceGrid');
 PRACTICE.forEach(a=>addCard(a,pgrid));
 
@@ -279,6 +296,7 @@ function fillHub(list, id){
 }
 fillHub(APPS,'hubEars');
 fillHub(PRACTICE,'hubPractice');
+fillHub(MODES,'hubModes');
 </script>
 <script>document.querySelectorAll("a.cm").forEach(function(a){var m=a.dataset.u+String.fromCharCode(64)+a.dataset.d;a.href="mailto:"+m;a.textContent=m;});</script>
 </body>
