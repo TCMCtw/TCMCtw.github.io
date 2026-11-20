@@ -131,7 +131,7 @@
   <div class="hub" id="hub">
     <div class="hub-block"><a class="hub-head" href="#ears">Harmony Ears 純律練耳<span class="arrow">↓</span><small>純律耳訓 · 6 個工具</small></a><ul class="hub-list" id="hubEars"></ul></div>
     <div class="hub-block"><a class="hub-head" href="#practice">練唱室 Practice Room<span class="arrow">↓</span><small>調音、跟唱與速度調性調整 · 2 個工具</small></a><ul class="hub-list" id="hubPractice"></ul></div>
-    <div class="hub-block"><a class="hub-head" href="#modes">調式 Modes<span class="arrow">↓</span><small>觀念教學、五個系列與聽音練習 · 1 個入口</small></a><ul class="hub-list" id="hubModes"></ul></div>
+    <div class="hub-block"><a class="hub-head" href="#modes">調式 Modes<span class="arrow">↓</span><small>觀念及調式練習、調式變化、小調與調式的音階變化 · 3 個入口</small></a><ul class="hub-list" id="hubModes"></ul></div>
   </div>
 
   <section class="cat" id="ears"><h2 class="cat-h">Harmony Ears 純律練耳</h2><div class="grid" id="appGrid"></div></section>
@@ -267,14 +267,28 @@ function addCard(app, target){
 
   target.appendChild(wrap);
 }
-// 調式練習入口：整個系列在 modal-practice-index，這裡只放一張入口卡
+// 調式練習入口：整個系列在 modal-practice-index，這裡放三張入口卡
 const MODES = [
   {
-    tag: '調式練習 Modes',
-    title: '調式練習 Modes Practice',
-    desc: '七個教會調式的開口唱練習：先從觀念教學認識音階與調式，再照系列練——練習一、二，降七、升四、同主音調式變化、一音變身，最後用聽音練習驗收。中英對照，附音檔、譜例與說明。',
-    ratios: ['觀念教學', '六個練習', '中英對照'],
+    tag: '觀念及調式練習 Concepts',
+    title: '觀念及調式練習 Concepts & Modes Practice',
+    desc: '先建立觀念：認識音階與調式；再開口唱：練習一、二跟著音檔唱七個調式，最後用調式聽音練習驗收。中英對照，附說明。',
+    ratios: ['觀念教學', '練習一、二', '聽音練習'],
     url: 'https://tcmctw.github.io/modal-practice-index/',
+  },
+  {
+    tag: '調式變化 Mode Changes',
+    title: '調式變化 Mode Changes',
+    desc: '一次改一個音，唱出新調式：降七、升四，以及 C 起音從 Lydian 逐次降音走到 Locrian 的同主音調式變化。附音檔、譜例與說明，每行可試聽。',
+    ratios: ['降七', '升四', '同主音調式變化'],
+    url: 'https://tcmctw.github.io/modal-practice-index/#changes',
+  },
+  {
+    tag: '小調與調式的音階變化 Minor & Modal',
+    title: '小調與調式的音階變化 Minor & Modal Scale Changes',
+    desc: '變一個音，從一個調式走到另一個調式：旋律小音階與和聲小音階的一音變身練習。',
+    ratios: ['旋律小音階', '和聲小音階'],
+    url: 'https://tcmctw.github.io/modal-practice-index/#minor',
   },
 ];
 
