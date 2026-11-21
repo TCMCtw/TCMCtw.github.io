@@ -131,7 +131,7 @@
   <div class="hub" id="hub">
     <div class="hub-block"><a class="hub-head" href="#ears">Harmony Ears 純律練耳<span class="arrow">↓</span><small>純律耳訓 · 6 個工具</small></a><ul class="hub-list" id="hubEars"></ul></div>
     <div class="hub-block"><a class="hub-head" href="#practice">練唱室 Practice Room<span class="arrow">↓</span><small>調音、跟唱與速度調性調整 · 2 個工具</small></a><ul class="hub-list" id="hubPractice"></ul></div>
-    <div class="hub-block"><a class="hub-head" href="#modes">調式 Modes<span class="arrow">↓</span><small>觀念及調式練習、調式變化、小調與調式的音階變化 · 3 個入口</small></a><ul class="hub-list" id="hubModes"></ul></div>
+    <div class="hub-block"><a class="hub-head" href="#modes">調式 Modes<span class="arrow">↓</span><small>觀念及調式練習、調式變化、小調與調式的音階變化、綜合測驗 · 4 個入口</small></a><ul class="hub-list" id="hubModes"></ul></div>
   </div>
 
   <section class="cat" id="ears"><h2 class="cat-h">Harmony Ears 純律練耳</h2><div class="grid" id="appGrid"></div></section>
@@ -267,7 +267,7 @@ function addCard(app, target){
 
   target.appendChild(wrap);
 }
-// 調式練習入口：整個系列在 modal-practice-index，這裡放三張入口卡
+// 調式練習入口：整個系列在 modal-practice-index，這裡放入口卡
 const MODES = [
   {
     tag: '觀念及調式練習 Concepts',
@@ -289,6 +289,13 @@ const MODES = [
     desc: '變一個音，從一個調式走到另一個調式：旋律小音階與和聲小音階的一音變身練習。',
     ratios: ['旋律小音階', '和聲小音階'],
     url: 'https://tcmctw.github.io/modal-practice-index/#minor',
+  },
+  {
+    tag: '綜合測驗 Mode Change Quiz',
+    title: '調式綜合測驗 Mode Change Quiz',
+    desc: '同一旋律骨架，後段換幾個音；聽出前段與後段各是哪個調式。10 題，答對 8 題及格。',
+    ratios: ['10 題', '8 題及格', '不限時'],
+    url: 'https://tcmctw.github.io/mode-change-quiz/',
   },
 ];
 
