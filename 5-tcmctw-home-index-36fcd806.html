@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harmony Ears｜TCMC 現代阿卡貝拉工具集</title>
+<style>
+  :root{
+    --charcoal:#2E3A3F;
+    --teal:#0B6E6E;
+    --teal-bright:#2FBFAA;
+    --gold:#E8A33D;
+    --paper:#EAF2F1;
+    --muted:#8FA3A0;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(1200px 600px at 20% -10%, #33424A 0%, var(--charcoal) 55%, #232C30 100%);
+    color:var(--paper);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,sans-serif;
+    min-height:100vh;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:48px 20px 60px;}
+
+  .eyebrow{
+    font-size:12px;letter-spacing:.14em;color:var(--teal-bright);
+    font-weight:700;text-transform:uppercase;margin-bottom:10px;text-align:center;
+  }
+  h1{
+    font-family:"Noto Serif TC",serif;
+    font-size:clamp(28px,5vw,40px);
+    margin:0 0 10px;font-weight:700;color:#fff;letter-spacing:.02em;text-align:center;
+  }
+  .sub{color:var(--muted);font-size:15px;line-height:1.7;text-align:center;max-width:560px;margin:0 auto 44px;}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+
+  .card-wrap{display:flex;flex-direction:column;}
+
+  .card{
+    display:block;text-decoration:none;color:inherit;
+    background:linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+    border:1px solid rgba(234,242,241,0.1);
+    border-radius:16px 16px 0 0;padding:24px 22px;
+    transition:transform .15s ease, border-color .15s ease, background .15s ease;
+    border-bottom:none;
+  }
+  .card:hover{
+    transform:translateY(-3px);
+    border-color:var(--teal-bright);
+    background:linear-gradient(180deg, rgba(47,191,170,0.08), rgba(255,255,255,0.02));
+  }
+  .card .tag{
+    display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;
+    color:var(--gold);background:rgba(232,163,61,0.14);border:1px solid rgba(232,163,61,0.3);
+    border-radius:20px;padding:3px 10px;margin-bottom:12px;
+  }
+  .card h2{
+    font-size:19px;margin:0 0 8px;font-weight:700;color:#fff;
+  }
+  .card p{
+    font-size:13.5px;color:var(--muted);line-height:1.6;margin:0 0 14px;
+  }
+  .card .ratios{
+    font-size:12px;color:var(--teal-bright);font-weight:600;
+    display:flex;gap:10px;flex-wrap:wrap;
+  }
+  .card .ratios span{
+    background:rgba(47,191,170,0.1);border-radius:6px;padding:2px 8px;
+  }
+  .card .arrow{
+    float:right;color:var(--muted);font-size:18px;transition:transform .15s ease, color .15s ease;
+  }
+  .card:hover .arrow{ transform:translateX(4px); color:var(--teal-bright); }
+
+  .manual-row{
+    display:flex;gap:8px;
+    border:1px solid rgba(234,242,241,0.1);border-top:none;
+    border-radius:0 0 16px 16px;
+    background:rgba(0,0,0,0.12);
+    padding:10px 22px;
+  }
+  .manual-row a{
+    flex:1;text-align:center;text-decoration:none;
+    font-size:12px;font-weight:600;letter-spacing:.02em;
+    color:var(--muted);
+    border:1px solid rgba(234,242,241,0.12);border-radius:8px;
+    padding:6px 8px;
+    transition:color .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .manual-row a:hover{
+    color:var(--teal-bright);border-color:var(--teal-bright);
+    background:rgba(47,191,170,0.08);
+  }
+
+  .card.placeholder{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;border-style:dashed;opacity:.55;cursor:default;
+    border-radius:16px;border-bottom:1px dashed rgba(234,242,241,0.1);
+  }
+  .card.placeholder:hover{ transform:none; border-color:rgba(234,242,241,0.1); background:linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015)); }
+  .card.placeholder .plus{ font-size:26px;color:var(--muted);margin-bottom:6px; }
+
+  footer{margin-top:48px;font-size:12px;color:var(--muted);text-align:center;line-height:1.8;}
+  footer a{color:var(--teal-bright);text-decoration:none;}
+  .cat{margin:0 0 40px;} .cat-h{font-family:"Noto Serif TC",serif;font-size:22px;color:var(--gold);margin:0 0 14px;}
+
+  html{scroll-behavior:smooth;}
+  .hub{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:0 0 44px;}
+  .hub-block{background:linear-gradient(180deg, rgba(47,191,170,0.10), rgba(255,255,255,0.02));border:1px solid rgba(47,191,170,0.35);border-radius:18px;padding:20px 20px 14px;}
+  .hub-head{display:block;text-decoration:none;color:#fff;font-family:"Noto Serif TC",serif;font-size:22px;font-weight:700;margin:0 0 4px;}
+  .hub-head small{display:block;font-family:inherit;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px;}
+  .hub-head .arrow{float:right;color:var(--teal-bright);}
+  .hub-list{list-style:none;margin:12px 0 0;padding:0;}
+  .hub-list a{display:block;text-decoration:none;color:var(--paper);font-size:15px;padding:11px 4px;border-top:1px solid rgba(234,242,241,0.1);}
+  .hub-list a:hover{color:var(--teal-bright);}
+  .hub-list a::after{content:"→";float:right;color:var(--muted);}
+  .cat{scroll-margin-top:16px;}
+  .license{margin-top:20px;font-size:11.5px;color:var(--muted);line-height:1.7;text-align:left;max-width:640px;margin-left:auto;margin-right:auto;}
+  .license p{margin:0 0 10px;}
+  .license a{color:var(--teal-bright);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">TCMC · Harmony Ears</div>
+  <h1>現代阿卡貝拉工具集</h1>
+  <div class="sub">台灣合唱音樂中心製作的網頁版工具集，分成純律耳訓、練唱和調式練習三類。<br>Web tools by TCMC, in three groups: just-intonation ear training, practice room, and modes practice.</div>
+
+  <div class="hub" id="hub">
+    <div class="hub-block"><a class="hub-head" href="#ears">Harmony Ears 純律練耳<span class="arrow">↓</span><small>純律耳訓 · 6 個工具</small></a><ul class="hub-list" id="hubEars"></ul></div>
+    <div class="hub-block"><a class="hub-head" href="#practice">練唱室 Practice Room<span class="arrow">↓</span><small>調音、跟唱與速度調性調整 · 2 個工具</small></a><ul class="hub-list" id="hubPractice"></ul></div>
+    <div class="hub-block"><a class="hub-head" href="#modes">調式 Modes<span class="arrow">↓</span><small>觀念及調式練習、調式變化、小調與調式的音階變化、綜合測驗 · 4 個入口</small></a><ul class="hub-list" id="hubModes"></ul></div>
+  </div>
+
+  <section class="cat" id="ears"><h2 class="cat-h">Harmony Ears 純律練耳</h2><div class="grid" id="appGrid"></div></section>
+  <section class="cat" id="modes"><h2 class="cat-h">調式 Modes</h2><div class="grid" id="modesGrid"></div></section>
+  <section class="cat" id="practice"><h2 class="cat-h">練唱室 Practice Room</h2><div class="grid" id="practiceGrid"></div></section>
+
+  <footer>
+    台灣合唱音樂中心製作 · Harmony Ears · 練唱室 Practice Room · 調式 Modes<br>
+    <a href="https://github.com/TCMCtw" target="_blank" rel="noopener">github.com/TCMCtw</a>
+</footer>
+  <div class="license">
+    <p>© 2026 台灣合唱音樂中心 (TCMC)。本工具以 <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh-hant" target="_blank" rel="noopener">CC BY-NC 4.0</a> 授權。<br>教學補充許可：教師與教育工作者可將本工具用於教學、示範與學生練習，課程是否收費皆可，不需另外申請商業授權。<br>不在許可範圍：出售本工具、將本工具或其改作版本作為獨立付費產品散布，或宣稱自己是原作者。其他商業用途請事先聯絡 <a class="cm" href="#" data-u="ylchu" data-d="tcmc.org.tw">ylchu&#32;(at)&#32;tcmc.org.tw</a>。</p>
+    <p>© 2026 Taiwan Choral Music Center (TCMC). Licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>.<br>Additional teaching permission: teachers and educators may use this tool for teaching, demonstration and student practice, whether or not the course charges a fee, without a separate commercial license.<br>Not permitted: selling this tool, distributing it or an adapted version as a standalone paid product, or claiming to be its original author. For other commercial uses, please contact <a class="cm" href="#" data-u="ylchu" data-d="tcmc.org.tw">ylchu&#32;(at)&#32;tcmc.org.tw</a> in advance.</p>
+  </div>
+
+
+<script>
+// 之後有新 app，只要在這裡加一筆資料就好，不用改版面結構。
+const APPS = [
+  {
+    tag: '拍音調音 Tune to Pure',
+    title: '調到沒拍音 Tune to Pure',
+    desc: '固定音一直響，拖滑桿或開口唱，把齊唱、八度、五度、四度調到拍音完全消失；麥克風即時偵測，含中文診斷報告 PDF。',
+    ratios: ['齊唱 1:1', '八度 2:1', '五度 3:2', '四度 4:3'],
+    url: 'https://tcmctw.github.io/tune-to-pure/',
+    manualZh: 'https://tcmctw.github.io/tune-to-pure/tune-to-pure-manual-zh.html',
+    manualEn: 'https://tcmctw.github.io/tune-to-pure/tune-to-pure-manual-en.html',
+  },
+  {
+    tag: '二度解決 Seconds',
+    title: '大小二度練習 Seconds Practice',
+    desc: '先調出大二度或小二度，再把同一個音解決到純三度或同音；滑桿調音或開口唱，麥克風即時判定，含中文診斷報告 PDF。',
+    ratios: ['大二度 9:8 → 5:4', '小二度 16:15 → 同音', '小二度 → 小三度 6:5'],
+    url: 'https://tcmctw.github.io/seconds-practice/',
+    manualZh: 'https://tcmctw.github.io/seconds-practice/seconds-practice-manual-zh.html',
+    manualEn: 'https://tcmctw.github.io/seconds-practice/seconds-practice-manual-en.html',
+  },
+
+  {
+    tag: '三和弦 Third',
+    title: '泛音三度音準練習       Just Intonation Third',
+    desc: '大三度／小三度純律音準練習，麥克風即時偵測，適合合唱團練習泛音融合的三和弦聽感。',
+    ratios: ['大三度 Major Third 5:4 −13.7¢', '小三度 Minor Third 6:5 +15.6¢'],
+    url: 'https://tcmctw.github.io/harmony-ears-third/',
+    manualZh: 'https://tcmctw.github.io/harmony-ears-third/manual/%E6%B3%9B%E9%9F%B3%E4%B8%89%E5%BA%A6%E9%9F%B3%E6%BA%96%E7%B7%B4%E7%BF%92_%E4%BD%BF%E7%94%A8%E8%AA%AA%E6%98%8E%E6%9B%B8.pdf',
+    manualEn: 'https://tcmctw.github.io/harmony-ears-third/manual/Harmonic_Third_Pitch_Trainer_User_Manual_EN.pdf',
+  },
+  {
+    tag: '七和弦 Seventh',
+    title: '七和弦泛音音準練習     Just Intonation Seventh',
+    desc: '大七和弦／屬七和弦純律音準練習，延續三和弦練習的架構，加入七音目標與即時判定。',
+    ratios: ['大七度 Major7 15:8 −11.7¢', '屬七度 Minor7 7:4 −31.2¢'],
+    url: 'https://tcmctw.github.io/harmony-ears-seventh/',
+    manualZh: 'https://tcmctw.github.io/harmony-ears-seventh/manual/%E4%B8%83%E5%92%8C%E5%BC%A6%E6%B3%9B%E9%9F%B3%E9%9F%B3%E6%BA%96%E7%B7%B4%E7%BF%92_%E4%BD%BF%E7%94%A8%E8%AA%AA%E6%98%8E%E6%9B%B8.pdf',
+    manualEn: 'https://tcmctw.github.io/harmony-ears-seventh/manual/Harmonic_Seventh_Pitch_Trainer_User_Manual_EN.pdf',
+  },
+  {
+    tag: '和弦聲部練習 Chord Voicing',
+    title: '和弦聲部練習 Chord Voicing Practise',
+    desc: '用和弦代號產生各聲部的音練習，選擇個聲部要唱哪個音後，再選擇要練習的聲部，開麥克風即時偵測。',
+    ratios: ['十二平均律'],
+    url: 'https://tcmctw.github.io/chord_voicing_practise/',
+    manualZh: 'https://tcmctw.github.io/chord_voicing_practise/manual/%E5%92%8C%E5%BC%A6%E8%81%B2%E9%83%A8%E9%9F%B3%E6%BA%96%E7%B7%B4%E7%BF%92_%E4%BD%BF%E7%94%A8%E8%AA%AA%E6%98%8E%E6%9B%B8.pdf',
+    manualEn: 'https://tcmctw.github.io/chord_voicing_practise/manual/Chord_Voicing_Trainer_User_Manual.pdf',
+  },
+  {
+    tag: '和弦進行 Chord Progression',
+    title: '和弦進行音準練習 Chord Progression Practise',
+    desc: '選一條和弦進行，選調，選你要唱的聲部，跟著節奏一路唱過整條和弦進行，麥克風即時偵測音準。',
+    ratios: ['十二平均律'],
+    url: 'https://tcmctw.github.io/chord_progression_practise/',
+    manualZh: 'https://tcmctw.github.io/chord_progression_practise/manual/%E5%92%8C%E5%BC%A6%E9%80%B2%E8%A1%8C%E9%9F%B3%E6%BA%96%E7%B7%B4%E7%BF%92_%E4%BD%BF%E7%94%A8%E8%AA%AA%E6%98%8E%E6%9B%B8.pdf',
+    manualEn: 'https://tcmctw.github.io/chord_progression_practise/manual/Chord_Progression_Pitch_Trainer_User_Manual.pdf',
+  },];
+
+const PRACTICE = [
+  {
+    tag: '跟唱 Sing-Along',
+    title: 'MIDI／音檔 跟唱音準練習       Sing-Along Pitch Trainer',
+    desc: '匯入 MIDI 或單聲部音檔（用來聽），再加 MusicXML 樂譜（用來看），選你的聲部跟唱；麥克風即時顯示音高偏差與頻譜。可變速、移調、起音、A-B 反覆，含評分與記錄 CSV，可匯出 WAV／MP3。',
+    ratios: ['即時偏差 ¢', 'A-B 反覆', '評分 CSV'],
+    url: 'https://tcmctw.github.io/Sing-along/',
+    manualZh: 'https://tcmctw.github.io/Sing-along/sing-along-manual-zh.html',
+    manualEn: 'https://tcmctw.github.io/Sing-along/sing-along-manual-en.html',
+  },
+  {
+    tag: '速度調性調整 Tempo & Key',
+    title: '速度調性調整       Tempo & Key Converter',
+    desc: '把練習音檔變速、移調，可試聽、調各聲部音量與左右，再匯出 WAV 或 MP3（各聲部分開或混成一個）。檔案只在你的裝置內處理。',
+    ratios: ['變速', '移調', 'WAV / MP3'],
+    url: 'https://tcmctw.github.io/Tempo-and-Key-Converter/',
+    manualZh: 'https://tcmctw.github.io/Tempo-and-Key-Converter/Tempo-and-Key-manual-zh.html',
+    manualEn: 'https://tcmctw.github.io/Tempo-and-Key-Converter/Tempo-and-Key-manual-en.html',
+  },
+  {
+    tag: '16beat 節奏大師',
+    title: '節奏大師 旗艦12風格版 Rhythm Master',
+    desc: '用 16 格練習一小節的重音配置，自選強弱拍音色、速度及重音數量，或套用 12 種風格預設；支援中英文切換與 WAV 匯出。',
+    ratios: ['16分音符重音', '12種風格', 'WAV匯出'],
+    url: 'https://tcmctw.github.io/rhythm-master/',
+    manualZh: 'https://tcmctw.github.io/rhythm-master/rhythm-master-manual-zh.html',
+    manualEn: 'https://tcmctw.github.io/rhythm-master/rhythm-master-manual-en.html',
+  },
+];
+
+const grid = document.getElementById('appGrid');
+function addCard(app, target){
+
+  const wrap = document.createElement('div');
+  wrap.className = 'card-wrap';
+
+  const a = document.createElement('a');
+  a.className = 'card';
+  a.href = app.url;
+  a.innerHTML = `
+    <span class="arrow">→</span>
+    <span class="tag">${app.tag}</span>
+    <h2>${app.title}</h2>
+    <p>${app.desc}</p>
+    <div class="ratios">${app.ratios.map(r=>`<span>${r}</span>`).join('')}</div>
+  `;
+  wrap.appendChild(a);
+
+  if (app.manualZh || app.manualEn) {
+    const manualRow = document.createElement('div');
+    manualRow.className = 'manual-row';
+    manualRow.innerHTML = `
+      ${app.manualZh ? `<a href="${app.manualZh}" target="_blank" rel="noopener">📄 使用手冊（中文）</a>` : ''}
+      ${app.manualEn ? `<a href="${app.manualEn}" target="_blank" rel="noopener">📄 Manual (EN)</a>` : ''}
+    `;
+    wrap.appendChild(manualRow);
+  }
+
+  target.appendChild(wrap);
+}
+// 調式練習入口：整個系列在 modal-practice-index，這裡放入口卡
+const MODES = [
+  {
+    tag: '觀念及調式練習 Concepts',
+    title: '觀念及調式練習 Concepts & Modes Practice',
+    desc: '先建立觀念：認識音階與調式；再開口唱：練習一、二跟著音檔唱七個調式，最後用調式聽音練習驗收。中英對照，附說明。',
+    ratios: ['觀念教學', '練習一、二', '聽音練習'],
+    url: 'https://tcmctw.github.io/modal-practice-index/',
+  },
+  {
+    tag: '調式變化 Mode Changes',
+    title: '調式變化 Mode Changes',
+    desc: '一次改一個音，唱出新調式：降七、升四，以及 C 起音從 Lydian 逐次降音走到 Locrian 的同主音調式變化。附音檔、譜例與說明，每行可試聽。',
+    ratios: ['降七', '升四', '同主音調式變化'],
+    url: 'https://tcmctw.github.io/modal-practice-index/#changes',
+  },
+  {
+    tag: '小調與調式的音階變化 Minor & Modal',
+    title: '小調與調式的音階變化 Minor & Modal Scale Changes',
+    desc: '變一個音，從一個調式走到另一個調式：旋律小音階與和聲小音階的一音變身練習。',
+    ratios: ['旋律小音階', '和聲小音階'],
+    url: 'https://tcmctw.github.io/modal-practice-index/#minor',
+  },
+  {
+    tag: '綜合測驗 Mode Change Quiz',
+    title: '調式綜合測驗 Mode Change Quiz',
+    desc: '同一旋律骨架，後段換幾個音；聽出前段與後段各是哪個調式。10 題，不限時，每題都有回饋。',
+    ratios: ['10 題', '不限時', '每題回饋'],
+    url: 'https://tcmctw.github.io/mode-change-quiz/',
+  },
+];
+
+APPS.forEach(a=>addCard(a,grid));
+const mgrid = document.getElementById('modesGrid');
+MODES.forEach(a=>addCard(a,mgrid));
+const pgrid = document.getElementById('practiceGrid');
+PRACTICE.forEach(a=>addCard(a,pgrid));
+
+// 佔位卡片，暗示之後還會有更多 app 加進來
+const placeholder = document.createElement('div');
+placeholder.className = 'card placeholder';
+placeholder.innerHTML = `<div class="plus">+</div><div>更多練唱工具陸續推出</div>`;
+pgrid.appendChild(placeholder);
+
+function fillHub(list, id){
+  const ul=document.getElementById(id);
+  list.forEach(a=>{const li=document.createElement('li');const l=document.createElement('a');l.href=a.url;l.textContent=a.tag;li.appendChild(l);ul.appendChild(li);});
+}
+fillHub(APPS,'hubEars');
+fillHub(PRACTICE,'hubPractice');
+fillHub(MODES,'hubModes');
+</script>
+<script>document.querySelectorAll("a.cm").forEach(function(a){var m=a.dataset.u+String.fromCharCode(64)+a.dataset.d;a.href="mailto:"+m;a.textContent=m;});</script>
+</body>
+</html>
